@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 # Read config files for hyperpameters and ES related information
 es_config, hparams_config = configparser.ConfigParser(), configparser.ConfigParser()
-es_config.read(Path(__file__).parent / ".." / "es_config.ini")
-hparams_config.read(Path(__file__).parent / ".." / "hparams_config.ini")
+es_config.read(Path(__file__).parent / ".." / "configs/es_config.ini")
+hparams_config.read(Path(__file__).parent / ".." / "configs/hparams_config.ini")
 
 es = get_es(
     cloud_id=es_config["ELASTIC"]["cloud_id"],
@@ -51,7 +51,7 @@ def app_shutdown():
 @app.get("/")
 def root():
     return Response(
-        "<h1>A self-documenting API to answer a question given to context in an Elastic Search cluster</h1>"
+        text="<h1>A self-documenting API to answer a question given to context in an Elastic Search cluster</h1>"
     )
 
 

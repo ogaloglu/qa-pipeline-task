@@ -85,7 +85,7 @@ def main():
     logging.info(dataset[:3])
 
     es_config = configparser.ConfigParser()
-    es_config.read(Path(__file__).parent / ".." / "es_config.ini")
+    es_config.read(Path(__file__).parent / ".." / "configs/es_config.ini")
     logging.info("config.ini is read.")
 
     es = get_es(
