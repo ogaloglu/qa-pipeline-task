@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import pipeline
 
-from .utils import get_context, get_es
+from .utils import get_config, get_context, get_es
 
 
 logging.basicConfig(
@@ -17,10 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Read config files for hyperpameters and ES related information
-es_config, hparams_config = configparser.ConfigParser(), configparser.ConfigParser()
-es_config.read(Path(__file__).parent / ".." / "configs/es_config.ini")
-hparams_config.read(Path(__file__).parent / ".." / "configs/hparams_config.ini")
+es_config, hparams_config = get_config("es_config.ini"), get_config("hparams_config.ini")
 
 es = get_es(
     cloud_id=es_config["ELASTIC"]["cloud_id"],

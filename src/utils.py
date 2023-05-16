@@ -1,7 +1,24 @@
 """Utility functions."""
+import configparser
+from pathlib import Path
 from typing import Any, Dict, List
 
 from elasticsearch import Elasticsearch
+
+
+def get_config(name: str) -> configparser.ConfigParser:
+    """Read the respective config.ini file and return a config object.
+
+    Args:
+        name (str): Name of the config within configs directory
+
+    Returns:
+        configparser.ConfigParser: Config object
+    """
+    config = configparser.ConfigParser()
+    with open(Path(__file__).parent / ".." / f"configs/{name}") as f:
+        config.read_file(f)
+    return config
 
 
 def get_context(
@@ -10,13 +27,13 @@ def get_context(
     """Retrieve the list of the most relevant contexts given a question from Elasticsearch cluster.
 
     Args:
-        question (str): Question that used as the query.
+        question (str): Question that used as the query
         index_name (str): Name of the index for retrieving the data
         size (int): Number of returned questions (responses)
         es (Elasticsearch): Elasticsearch client instance
 
     Returns:
-        List[str]: List of contexts (responses) for a given question (query).
+        List[str]: List of contexts (responses) for a given question (query)
     """
     res = es.search(
         index=index_name, body={"query": {"match": {"context": question}}}, size=size

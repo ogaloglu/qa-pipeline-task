@@ -9,7 +9,7 @@ from pathlib import Path
 from datasets import load_dataset
 from evaluate import evaluator
 
-from utils import calculate_element_mrr, get_es, update_context
+from utils import calculate_element_mrr, get_config, get_es, update_context
 
 logging.basicConfig(
     format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
@@ -84,8 +84,7 @@ def main():
     logging.info(len(dataset))
     logging.info(dataset[:3])
 
-    es_config = configparser.ConfigParser()
-    es_config.read(Path(__file__).parent / ".." / "configs/es_config.ini")
+    es_config = get_config("es_config.ini")
     logging.info("config.ini is read.")
 
     es = get_es(
