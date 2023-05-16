@@ -1,10 +1,8 @@
 """Evaluation script for the QA pipeline."""
 import argparse
-import configparser
 import logging
 import os
 from collections import Counter
-from pathlib import Path
 
 from datasets import load_dataset
 from evaluate import evaluator

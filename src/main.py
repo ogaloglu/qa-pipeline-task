@@ -1,7 +1,5 @@
 """Main script for the QA application."""
-import configparser
 import logging
-from pathlib import Path
 
 from fastapi import FastAPI
 from pydantic import BaseModel
