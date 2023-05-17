@@ -4,13 +4,13 @@ import logging
 import os
 from collections import Counter
 
+import torch
 from datasets import load_dataset
 from evaluate import evaluator
 
 from src.utils import calculate_element_mrr, get_config, get_es, update_context
 
 logger = logging.getLogger(__name__)
-
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Evaluating the QA pipeline.")
@@ -126,6 +126,7 @@ def main():
                 model_or_pipeline=args.model_name,
                 data=dataset,
                 metric="squad",
+                device=0 if torch.cuda.is_available() else -1,
             )
 
             logging.info(eval_results)

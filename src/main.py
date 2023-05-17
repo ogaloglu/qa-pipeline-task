@@ -1,6 +1,7 @@
 """Main script for the QA application."""
 import logging
 
+import torch
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import pipeline
@@ -20,7 +21,10 @@ es = get_es(
 app = FastAPI()
 
 question_answerer = pipeline(
-    "question-answering", model=hparams_config["HYPERPARAMS"]["model_checkpoint"]
+    "question-answering",
+    model=hparams_config["HYPERPARAMS"]["model_checkpoint"],
+    device=0 if torch.cuda.is_available() else -1,
+    load_in_8bit=True
 )
 
 
