@@ -101,7 +101,6 @@ class TestCalculateElementMRR(unittest.TestCase):
         updated_example = calculate_element_mrr(
             self.example, self.index_name, self.size, self.es
         )
-
         self.assertEqual(updated_example["mrr"], 1)
 
     @patch("src.utils.get_context")
@@ -112,10 +111,10 @@ class TestCalculateElementMRR(unittest.TestCase):
         # Assert MRR is less than 1 and greater than zero when the correct
         # context is not retieved first but still within the retrieved contexts
         mock_get_context.return_value = ["dummy", "answer"]
-        with unittest.mock.patch("src.utils.get_context", mock_get_context):
-            updated_example = calculate_element_mrr(
+        
+        updated_example = calculate_element_mrr(
                 self.example, self.index_name, self.size, self.es
-            )
+        )
         self.assertEqual(updated_example["mrr"], 0.5)
 
     @patch("src.utils.get_context")
@@ -125,10 +124,9 @@ class TestCalculateElementMRR(unittest.TestCase):
     ):
         # Assert MRR is 0 when the correct context is not retrieved at all
         mock_get_context.return_value = ["dummy", "dummy"]
-        with unittest.mock.patch("src.utils.get_context", mock_get_context):
-            updated_example = calculate_element_mrr(
+        updated_example = calculate_element_mrr(
                 self.example, self.index_name, self.size, self.es
-            )
+        )
         self.assertEqual(updated_example["mrr"], 0.0)
 
 
