@@ -1,8 +1,15 @@
 # qa-pipeline-task
 ## Overview
-
-
-
+retriever-reader paradigm
+### Model
+extractive qa - distilbert fine-tuned on squad
+### Dataset
+ [Squad Dataset](https://huggingface.co/datasets/squad) 
+### Metrics
+#### F1
+#### Exact Match
+#### MRR
+#### Latency
 
 ## Directory Structure
 ```bash
@@ -46,9 +53,7 @@ Run a container based on the built image
 ```bash
 docker run -d --name app-container -p 80:80 qa-fastapi-demo
 ```
-
 Connect to SwaggerUI [http://127.0.0.1/docs](http://127.0.0.1/docs) which has a user friendly interface to call and test API directly from browser.
-
 
 ### Evalution Pipeline
 First create a conda environment
@@ -73,6 +78,16 @@ conda create -n "venv" python=3.10
 ```bash
 pytest
 ```
-
-
 ## Future Work
+### Caching
+### Inference Monitoring
+### ONNX Runtime
+### More Tests
+### Focus on Reading or Retrieving?
+Standalone reader with only one context performs already well.
+When the context size get larger, the performance drops with the selected model. Therefore, the focus can be given to keep the reader as is with context size 1, and try out different retrieval paradimgs. MRR could be used as a metric to select a better retriever. Current retriever uses bm25.
+### Combining Reader and Retriever Scores
+### Evaluate Inference According Threshold
+
+
+
