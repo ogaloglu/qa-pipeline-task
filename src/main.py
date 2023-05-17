@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import pipeline
 
-from .utils import get_config, get_context, get_es
+from src.utils import get_config, get_context, get_es
 
 
 logging.basicConfig(
@@ -51,7 +51,7 @@ def root():
 
 
 @app.post("/extract")
-def predict(body: QuestionRequest):
+def extract(body: QuestionRequest):
     # context is to be extracted from ES
     concat_context = " ".join(
         get_context(

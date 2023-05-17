@@ -7,7 +7,7 @@ from collections import Counter
 from datasets import load_dataset
 from evaluate import evaluator
 
-from utils import calculate_element_mrr, get_config, get_es, update_context
+from src.utils import calculate_element_mrr, get_config, get_es, update_context
 
 logging.basicConfig(
     format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
@@ -103,9 +103,13 @@ def main():
                 },
             )
             cnt = Counter(dataset["mrr"])
+            # logging.info(
+            #     f"MRR: {cnt[1] / len(dataset):.2%}, Ratio of answers "
+            #     f"that are not captured within selected responses: {cnt[0] / len(dataset):.2%}"
+            # )
             logging.info(
-                f"MRR: {cnt[1] / len(dataset):.2%}, Ratio of answers "
-                f"that are not captured within selected responses: {cnt[0] / len(dataset):.2%}"
+                f"MRR: {cnt[1] / len(dataset)}, Ratio of answers "
+                f"that are not captured within selected responses: {cnt[0] / len(dataset)}"
             )
             # logging.info(f"{cnt[0] / len(dataset):.2%}")
 
