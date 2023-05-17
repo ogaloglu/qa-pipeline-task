@@ -10,7 +10,8 @@ from src.utils import get_config, get_context, get_es
 
 logger = logging.getLogger(__name__)
 
-es_config, hparams_config = get_config("es_config.ini"), get_config("hparams_config.ini")
+es_config = get_config("es_config.ini")
+hparams_config = get_config("hparams_config.ini")
 
 es = get_es(
     cloud_id=es_config["ELASTIC"]["cloud_id"],
@@ -43,7 +44,9 @@ def app_shutdown():
 
 @app.get("/")
 def root():
-    return Response(text="<h1>A self-documenting API for question answering</h1>")
+    return Response(
+        text="<h1>A self-documenting API for question answering</h1>"
+    )
 
 
 @app.post("/extract")

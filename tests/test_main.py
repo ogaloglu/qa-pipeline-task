@@ -17,7 +17,9 @@ class MyScriptTestCase(unittest.TestCase):
     @patch("src.main.get_es")
     @patch("src.main.get_context")
     @patch("src.main.question_answerer")
-    def test_extract_high_score(self, mock_question_answerer, mock_get_context, mock_get_es):
+    def test_extract_high_score(
+        self, mock_question_answerer, mock_get_context, mock_get_es
+    ):
         mock_get_context.return_value = ["example1", "example2"]
         mock_question_answerer.return_value = {
             "answer": "answer",
@@ -31,7 +33,9 @@ class MyScriptTestCase(unittest.TestCase):
     @patch("src.main.get_es")
     @patch("src.main.get_context")
     @patch("src.main.question_answerer")
-    def test_extract_low_score(self, mock_question_answerer, mock_get_context, mock_get_es):
+    def test_extract_low_score(
+        self, mock_question_answerer, mock_get_context, mock_get_es
+    ):
         mock_get_context.return_value = ["example1", "example2"]
         mock_question_answerer.return_value = {
             "answer": "answer",

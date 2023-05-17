@@ -20,23 +20,25 @@ def parse_arguments():
         "--pipeline",
         type=str,
         required=True,
-        help="Selection of the pipeline part to be evalated. Retrieval corresonds to only "
-        "retrieval, reader corresponds to only reader and e2e corresponds to end-to-end pipeline.",
+        help="Selection of the pipeline part to be evalated. Retrieval "
+        "corresonds to only retrieval, reader corresponds to only reader "
+        "and e2e corresponds to end-to-end pipeline.",
         choices=["retrieval", "reader", "e2e"],
     )
     parser.add_argument(
         "--val_set_size",
         type=int,
         default=None,
-        help="Size of the validation set. A subset of the validation set can be used for quick"
-        "experimentation.",
+        help="Size of the validation set. A subset of the validation set can "
+        "be used for quick experimentation.",
     )
     parser.add_argument(
         "--context_size",
         type=int,
         default=None,
         required=True,
-        help="Number of contexts (responses) to be retrieved given a question (request).",
+        help="Number of contexts (responses) to be retrieved given a question "
+        "(request).",
     )
     parser.add_argument(
         "--dataset_path",
@@ -101,15 +103,13 @@ def main():
                 },
             )
             cnt = Counter(dataset["mrr"])
-            # logging.info(
-            #     f"MRR: {cnt[1] / len(dataset):.2%}, Ratio of answers "
-            #     f"that are not captured within selected responses: {cnt[0] / len(dataset):.2%}"
-            # )
             logging.info(
                 f"MRR: {sum(dataset['mrr']) / len(dataset)}, "
-                # Ratio of true answers (contexts) that are retrieved as the first response
+                # Ratio of true answers (contexts) that are retrieved as
+                # the first response
                 f"ratio of true first reponse: {cnt[1] / len(dataset):.2%}, "
-                # Ratio of answers (contexts) that are not captured within selected responses
+                # Ratio of answers (contexts) that are not captured within
+                #  selected responses
                 f"ratio of uncapture res: {cnt[0] / len(dataset):.2%}"
             )
 

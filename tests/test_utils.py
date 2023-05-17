@@ -20,7 +20,7 @@ class TestGetConfig(unittest.TestCase):
         expected_options = ["cloud_id", "user", "password"]
 
         config = get_config(config_name)
-        
+
         # Assert that required options exist within the config file
         self.assertIsInstance(config, configparser.ConfigParser)
         for option in expected_options:
@@ -53,7 +53,8 @@ class TestGetContext(unittest.TestCase):
         # Assert the expected result
         self.assertEqual(result, ["example1", "example2"])
 
-        # Assert that Elasticsearch search method was called with the correct arguments
+        # Assert that Elasticsearch search method was called with the correct
+        # arguments
         self.es.search.assert_called_once_with(
             index=index_name,
             body={"query": {"match": {"context": question}}},
@@ -101,7 +102,7 @@ class TestCalculateElementMRR(unittest.TestCase):
         self.assertEqual(updated_example["mrr"], 1)
 
     def test_calculate_element_mrr_with_answer_not_beginning(self):
-        # Assert MRR is less than 1 and greater than zero when the correct 
+        # Assert MRR is less than 1 and greater than zero when the correct
         # context is not retieved first but still within the retrieved contexts
         get_context_mock = Mock(return_value=["dummy", "answer"])
         with unittest.mock.patch("src.utils.get_context", get_context_mock):
@@ -142,7 +143,9 @@ class TestUpdateContext(unittest.TestCase):
             )
 
         # Assert the context has been updated correctly
-        self.assertEqual(updated_example["context"], " ".join(expected_context))
+        self.assertEqual(
+            updated_example["context"], " ".join(expected_context)
+        )
 
         # Assert that get_context was called with the correct arguments
         get_context_mock.assert_called_once_with(

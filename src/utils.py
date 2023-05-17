@@ -24,7 +24,8 @@ def get_config(name: str) -> configparser.ConfigParser:
 def get_context(
     question: str, index_name: str, size: int, es: Elasticsearch
 ) -> List[str]:
-    """Retrieve the list of the most relevant contexts given a question from Elasticsearch cluster.
+    """Retrieve the list of the most relevant contexts given a question from
+    Elasticsearch cluster.
 
     Args:
         question (str): Question that used as the query
@@ -36,7 +37,9 @@ def get_context(
         List[str]: List of contexts (responses) for a given question (query)
     """
     res = es.search(
-        index=index_name, body={"query": {"match": {"context": question}}}, size=size
+        index=index_name,
+        body={"query": {"match": {"context": question}}},
+        size=size
     )
     # TODO: add retrieval scores
     return [i["_source"]["context"] for i in res["hits"]["hits"]]
