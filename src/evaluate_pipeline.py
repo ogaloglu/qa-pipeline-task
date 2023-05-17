@@ -109,8 +109,8 @@ def main():
                 # the first response
                 f"ratio of true first reponse: {cnt[1] / len(dataset):.2%}, "
                 # Ratio of answers (contexts) that are not captured within
-                #  selected responses
-                f"ratio of uncapture res: {cnt[0] / len(dataset):.2%}"
+                # selected responses
+                f"ratio of uncapture response: {cnt[0] / len(dataset):.2%}"
             )
 
         case "e2e" | "reader":
