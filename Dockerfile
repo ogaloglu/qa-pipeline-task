@@ -10,7 +10,7 @@ COPY ./src /code/src
 
 COPY setup.py /code
 
-RUN pip install -e .
+RUN pip install .
 
 COPY ./configs /code/configs
 
