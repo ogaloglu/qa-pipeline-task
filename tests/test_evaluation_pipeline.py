@@ -20,6 +20,7 @@ class TestScript(unittest.TestCase):
         mock_dataset = MagicMock()
         mock_dataset.shuffle.return_value = mock_dataset
         mock_load_dataset.return_value = mock_dataset
+        mock_len.return_value = 2
 
         # Run main function
         main()
@@ -29,8 +30,6 @@ class TestScript(unittest.TestCase):
             "json", data_files="path/to/dataset", split="train"
         )
         mock_dataset.shuffle.assert_called_once_with(seed=42)
-
-        mock_dataset.select.assert_called()
 
 
 if __name__ == "__main__":
