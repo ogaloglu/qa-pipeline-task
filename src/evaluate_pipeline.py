@@ -12,7 +12,9 @@ from src.utils import calculate_element_mrr, get_config, get_es, update_context
 
 logger = logging.getLogger(__name__)
 
+
 def parse_arguments():
+    """Parse arguments."""
     parser = argparse.ArgumentParser(description="Evaluating the QA pipeline.")
     parser.add_argument(
         "--pipeline",
@@ -71,7 +73,7 @@ def main():
     dataset = dataset.shuffle(seed=42)
     logging.info("Data is loaded and shuffled.")
 
-    if args.val_set_size is not None or args.val_set_size < len(dataset):
+    if args.val_set_size is not None and args.val_set_size < len(dataset):
         dataset = dataset.select(range(args.val_set_size))
         logging.info("A subset of the original dataset is selected.")
 
@@ -104,10 +106,12 @@ def main():
             #     f"that are not captured within selected responses: {cnt[0] / len(dataset):.2%}"
             # )
             logging.info(
-                f"MRR: {cnt[1] / len(dataset)}, Ratio of answers "
-                f"that are not captured within selected responses: {cnt[0] / len(dataset)}"
+                f"MRR: {sum(dataset['mrr']) / len(dataset)}, "
+                # Ratio of true answers (contexts) that are retrieved as the first response
+                f"ratio of true first reponse: {cnt[1] / len(dataset):.2%}, "
+                # Ratio of answers (contexts) that are not captured within selected responses
+                f"ratio of uncapture res: {cnt[0] / len(dataset):.2%}"
             )
-            # logging.info(f"{cnt[0] / len(dataset):.2%}")
 
         case "e2e" | "reader":
             if args.pipeline == "e2e":

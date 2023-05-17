@@ -24,7 +24,7 @@ question_answerer = pipeline(
     "question-answering",
     model=hparams_config["HYPERPARAMS"]["model_checkpoint"],
     device=0 if torch.cuda.is_available() else -1,
-    load_in_8bit=True
+    load_in_8bit=True,
 )
 
 
