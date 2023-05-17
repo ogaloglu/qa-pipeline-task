@@ -9,10 +9,6 @@ from evaluate import evaluator
 
 from src.utils import calculate_element_mrr, get_config, get_es, update_context
 
-logging.basicConfig(
-    format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
 

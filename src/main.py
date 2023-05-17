@@ -7,13 +7,7 @@ from transformers import pipeline
 
 from src.utils import get_config, get_context, get_es
 
-
-logging.basicConfig(
-    format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
-
 
 es_config, hparams_config = get_config("es_config.ini"), get_config("hparams_config.ini")
 
@@ -45,9 +39,7 @@ def app_shutdown():
 
 @app.get("/")
 def root():
-    return Response(
-        text="<h1>A self-documenting API to answer a question given to context in an Elastic Search cluster</h1>"
-    )
+    return Response(text="<h1>A self-documenting API for question answering</h1>")
 
 
 @app.post("/extract")
