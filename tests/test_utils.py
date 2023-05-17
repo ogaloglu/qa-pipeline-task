@@ -1,6 +1,6 @@
 import configparser
 import unittest
-from unittest.mock import Mock
+from unittest.mock import patch, Mock
 
 from elasticsearch import Elasticsearch
 
@@ -91,30 +91,41 @@ class TestCalculateElementMRR(unittest.TestCase):
         self.size = 2
         self.es = Mock(spec=Elasticsearch)
 
-    def test_calculate_element_mrr_with_answer_beginning(self):
+    @patch("src.utils.get_context")
+    def test_calculate_element_mrr_with_answer_beginning(
+        self,
+        mock_get_context
+    ):
         # Assert MRR is equal to 1 when the correct context is retieved first
-        get_context_mock = Mock(return_value=["answer", "answer"])
-        with unittest.mock.patch("src.utils.get_context", get_context_mock):
-            updated_example = calculate_element_mrr(
-                self.example, self.index_name, self.size, self.es
-            )
+        mock_get_context.return_value = ["answer", "answer"]
+        updated_example = calculate_element_mrr(
+            self.example, self.index_name, self.size, self.es
+        )
 
         self.assertEqual(updated_example["mrr"], 1)
 
-    def test_calculate_element_mrr_with_answer_not_beginning(self):
+    @patch("src.utils.get_context")
+    def test_calculate_element_mrr_with_answer_not_beginning(
+        self,
+        mock_get_context
+    ):
         # Assert MRR is less than 1 and greater than zero when the correct
         # context is not retieved first but still within the retrieved contexts
-        get_context_mock = Mock(return_value=["dummy", "answer"])
-        with unittest.mock.patch("src.utils.get_context", get_context_mock):
+        mock_get_context.return_value = ["dummy", "answer"]
+        with unittest.mock.patch("src.utils.get_context", mock_get_context):
             updated_example = calculate_element_mrr(
                 self.example, self.index_name, self.size, self.es
             )
         self.assertEqual(updated_example["mrr"], 0.5)
 
-    def test_calculate_element_mrr_without_answer(self):
+    @patch("src.utils.get_context")
+    def test_calculate_element_mrr_without_answer(
+        self,
+        mock_get_context
+    ):
         # Assert MRR is 0 when the correct context is not retrieved at all
-        get_context_mock = Mock(return_value=["dummy", "dummy"])
-        with unittest.mock.patch("src.utils.get_context", get_context_mock):
+        mock_get_context.return_value = ["dummy", "dummy"]
+        with unittest.mock.patch("src.utils.get_context", mock_get_context):
             updated_example = calculate_element_mrr(
                 self.example, self.index_name, self.size, self.es
             )
@@ -131,16 +142,16 @@ class TestUpdateContext(unittest.TestCase):
         self.size = 2
         self.es = Mock(spec=Elasticsearch)
 
-    def test_update_context(self):
+    @patch("src.utils.get_context")
+    def test_update_context(self, mock_get_context):
         # Mock the get_context function
         expected_context = ["answer", "answer"]
-        get_context_mock = Mock(return_value=expected_context)
+        mock_get_context.return_value = expected_context
 
         # Set up the mock return value of get_context
-        with unittest.mock.patch("src.utils.get_context", get_context_mock):
-            updated_example = update_context(
+        updated_example = update_context(
                 self.example, self.index_name, self.size, self.es
-            )
+        )
 
         # Assert the context has been updated correctly
         self.assertEqual(
@@ -148,7 +159,7 @@ class TestUpdateContext(unittest.TestCase):
         )
 
         # Assert that get_context was called with the correct arguments
-        get_context_mock.assert_called_once_with(
+        mock_get_context.assert_called_once_with(
             self.example["question"], self.index_name, self.size, self.es
         )
 
