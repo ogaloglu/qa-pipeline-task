@@ -111,7 +111,7 @@ class TestCalculateElementMRR(unittest.TestCase):
         # Assert MRR is less than 1 and greater than zero when the correct
         # context is not retieved first but still within the retrieved contexts
         mock_get_context.return_value = ["dummy", "answer"]
-        
+
         updated_example = calculate_element_mrr(
                 self.example, self.index_name, self.size, self.es
         )
