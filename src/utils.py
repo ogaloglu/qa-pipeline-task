@@ -41,7 +41,6 @@ def get_context(
         body={"query": {"match": {"context": question}}},
         size=size
     )
-    # TODO: add retrieval scores
     return [i["_source"]["context"] for i in res["hits"]["hits"]]
 
 
