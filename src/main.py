@@ -60,11 +60,15 @@ def extract(body: QuestionRequest):
             es=es,
         )
     )
-    result = question_answerer(question=body.text, context=concat_context)
+    # For the cases that Elasticsearch returns null
+    if not concat_context:
+        text = "Answer is not found."
+    else:
+        result = question_answerer(question=body.text, context=concat_context)
 
-    text = (
-        result["answer"]
-        if result["score"] > float(hparams_config["HYPERPARAMS"]["qa_threshold"])
-        else "Answer is not found"
-    )
+        text = (
+            result["answer"]
+            if result["score"] > float(hparams_config["HYPERPARAMS"]["qa_threshold"])
+            else "Answer is not found."
+        )
     return Response(text=text)

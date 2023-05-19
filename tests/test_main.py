@@ -44,7 +44,21 @@ class MyScriptTestCase(unittest.TestCase):
         response = self.client.post("/extract", json={"text": "question"})
         self.assertEqual(response.status_code, 200)
         # Assert returning the default answer for scores under the threshold
-        self.assertEqual(response.json()["text"], "Answer is not found")
+        self.assertEqual(response.json()["text"], "Answer is not found.")
+
+    @patch("src.main.get_es")
+    @patch("src.main.get_context")
+    @patch("src.main.question_answerer")
+    def test_extract_es_returns_null(
+        self, mock_question_answerer, mock_get_context, mock_get_es
+    ):
+        mock_get_context.return_value = []
+        response = self.client.post("/extract", json={"text": "question"})
+        self.assertEqual(response.status_code, 200)
+        # Assert returning the default answer for scores under the threshold
+        self.assertEqual(response.json()["text"], "Answer is not found.")
+        # Assert pipeline is not called
+        mock_question_answerer.assert_not_called()
 
 
 if __name__ == "__main__":
