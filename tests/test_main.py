@@ -2,7 +2,7 @@ import unittest
 from fastapi.testclient import TestClient
 from unittest.mock import patch
 
-from src.main import app, get_context, get_es
+from src.main import app, get_context
 
 
 class MyScriptTestCase(unittest.TestCase):
@@ -37,7 +37,7 @@ class MyScriptTestCase(unittest.TestCase):
         mock_get_context.return_value = ["example1", "example2"]
         mock_question_answerer.return_value = {
             "answer": "answer",
-            "score": 0.3,
+            "score": 0.0001,
         }
         response = self.client.post("/extract", json={"text": "question"})
         self.assertEqual(response.status_code, 200)
