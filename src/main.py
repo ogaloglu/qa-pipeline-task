@@ -68,7 +68,8 @@ def extract(body: QuestionRequest):
 
         text = (
             result["answer"]
-            if result["score"] > float(hparams_config["HYPERPARAMS"]["qa_threshold"])
+            if result["score"]
+            > float(hparams_config["HYPERPARAMS"]["qa_threshold"])
             else "Answer is not found."
         )
     return Response(text=text)
