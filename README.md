@@ -32,9 +32,8 @@ In this project, extractive question answering formulation is chosen. Accordingl
 * End-To-End Pipeline and Only Reader
     * F1
     * Exact Match
-    * Latency
 * Only Retriever
-    * MRR
+    * MRR (Mean Reciprocal Rank)
 
 ## Project Structure
 ```bash
