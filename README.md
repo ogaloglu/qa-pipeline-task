@@ -78,6 +78,17 @@ user = {INSERT_USERNAME}
 password = {INSERT_PASSWORD}
 ```
 Obtain the necessary credentials from the [author](mailto:onur.galoglu@gmail.com) and update the values accordingly. Then, rename the file to  `es_config.ini`.
+
+### Hyperparameters Configuration
+The `configs/hparams_config.ini` file contains the following default content:
+```bash
+[HYPERPARAMS]
+model_checkpoint = distilbert-base-uncased-distilled-squad
+context_size = 2
+index_name = squad_dedup_train
+qa_threshold = 0.20
+```
+All keys are required for the inference.
 ### Running Docker Application
 Build the Docker image by executing the following command:
 ```bash
@@ -114,7 +125,7 @@ Finally, to evaluate the pipeline, run the following command:
 ```bash
 python src/evaluate_pipeline.py\
     --pipeline retrieval\
-    --context_size 1\
+    --context_size 2\
     --val_set_size 100\
     --dataset_path squad_dedup_validation.json
 ```
