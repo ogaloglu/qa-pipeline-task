@@ -8,7 +8,12 @@ import torch
 from datasets import load_dataset
 from evaluate import evaluator
 
-from src.utils import calculate_element_mrr, get_config, get_es, update_context
+from src.utils import (
+    calculate_element_mrr,
+    get_config,
+    get_elastic_search_client,
+    update_context,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -79,13 +84,14 @@ def main():
         dataset = dataset.select(range(args.val_set_size))
         logging.info("A subset of the original dataset is selected.")
 
-    logging.info(len(dataset))
+    logging.info(f"Length of the dataset: {len(dataset)}")
+    logging.info("The first three examples from the dataset:")
     logging.info(dataset[:3])
 
     es_config = get_config("es_config.ini")
     logging.info("config.ini is read.")
 
-    es = get_es(
+    es = get_elastic_search_client(
         cloud_id=es_config["ELASTIC"]["cloud_id"],
         user=es_config["ELASTIC"]["user"],
         password=es_config["ELASTIC"]["password"],

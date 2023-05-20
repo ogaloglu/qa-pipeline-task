@@ -8,7 +8,7 @@ from src.utils import (
     calculate_element_mrr,
     get_config,
     get_context,
-    get_es,
+    get_elastic_search_client,
     update_context,
 )
 
@@ -71,16 +71,18 @@ class TestGetES(unittest.TestCase):
         self.user = es_config["ELASTIC"]["user"]
         self.password = es_config["ELASTIC"]["password"]
 
-    def test_get_es_with_correct_inputs(self):
+    def test_get_elastic_search_client_with_correct_inputs(self):
         # Assert that ES client is established with correct inputs
-        es = get_es(self.cloud_id, self.user, self.password)
+        es = get_elastic_search_client(self.cloud_id, self.user, self.password)
         self.assertIsInstance(es, Elasticsearch)
         es.info()
 
-    def test_get_es_with_incorrect_inputs(self):
+    def test_get_elastic_search_client_with_incorrect_inputs(self):
         # Assert that ES client is not estabilshed with incorrect inputs
         with self.assertRaises(Exception):
-            es = get_es(self.cloud_id, self.user + "dummy", self.password)
+            es = get_elastic_search_client(
+                self.cloud_id, self.user + "dummy", self.password
+            )
             es.info()
 
 

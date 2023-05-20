@@ -6,18 +6,19 @@ from typing import Any, Dict, List
 from elasticsearch import Elasticsearch
 
 
-def get_config(name: str) -> configparser.ConfigParser:
+def get_config(config_name: str) -> configparser.ConfigParser:
     """Read the respective config.ini file and return a config object.
 
     Args:
-        name (str): Name of the config within configs directory
+        config_name (str): Name of the config within configs directory
 
     Returns:
         configparser.ConfigParser: Config object
     """
     config = configparser.ConfigParser()
-    with open(Path(__file__).parent / ".." / f"configs/{name}") as f:
-        config.read_file(f)
+    config_file_path = Path(__file__).parent / ".." / f"configs/{config_name}"
+    with open(config_file_path) as file:
+        config.read_file(file)
     return config
 
 
@@ -36,12 +37,12 @@ def get_context(
     Returns:
         List[str]: List of contexts (responses) for a given question (query)
     """
-    res = es.search(
+    results = es.search(
         index=index_name,
         body={"query": {"match": {"context": question}}},
         size=size
     )
-    return [i["_source"]["context"] for i in res["hits"]["hits"]]
+    return [i["_source"]["context"] for i in results["hits"]["hits"]]
 
 
 def update_context(
@@ -67,7 +68,7 @@ def update_context(
 def calculate_element_mrr(
     example: Dict[str, Any], index_name: str, size: int, es: Elasticsearch
 ) -> Dict[str, Any]:
-    """Calculate MRR after.
+    """Calculate MRR (Mean Reciprocal Rank) after.
 
     Args:
         example (Dict[str, Any]): Single data instance
@@ -87,7 +88,9 @@ def calculate_element_mrr(
     return example
 
 
-def get_es(cloud_id: str, user: str, password: str) -> Elasticsearch:
+def get_elastic_search_client(
+        cloud_id: str, user: str, password: str
+) -> Elasticsearch:
     """Get Elasticsearch client instance.
 
     Args:
