@@ -16,7 +16,7 @@ def get_config(config_name: str) -> configparser.ConfigParser:
         configparser.ConfigParser: Config object
     """
     config = configparser.ConfigParser()
-    config_file_path = Path(__file__).parent / ".." / f"configs/{config_name}"
+    config_file_path = Path(__file__).parent / ".." / f"configs/{config_name}.ini"
     with open(config_file_path) as file:
         config.read_file(file)
     return config

@@ -88,8 +88,8 @@ def main():
     logging.info("The first three examples from the dataset:")
     logging.info(dataset[:3])
 
-    es_config = get_config("es_config.ini")
-    logging.info("config.ini is read.")
+    es_config = get_config("es_config")
+    logging.info("es_config.ini is read.")
 
     es = get_elastic_search_client(
         cloud_id=es_config["ELASTIC"]["cloud_id"],

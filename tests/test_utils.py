@@ -15,7 +15,7 @@ from src.utils import (
 
 class TestGetConfig(unittest.TestCase):
     def test_get_config(self):
-        config_name = "es_config.ini"
+        config_name = "es_config"
         section_name = "ELASTIC"
         expected_options = ["cloud_id", "user", "password"]
 
@@ -65,7 +65,7 @@ class TestGetContext(unittest.TestCase):
 class TestGetES(unittest.TestCase):
     def setUp(self):
         # Read config files for hyperpameters and ES related information
-        es_config = get_config("es_config.ini")
+        es_config = get_config("es_config")
 
         self.cloud_id = es_config["ELASTIC"]["cloud_id"]
         self.user = es_config["ELASTIC"]["user"]

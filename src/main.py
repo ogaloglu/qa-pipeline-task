@@ -10,8 +10,8 @@ from src.utils import get_config, get_context, get_elastic_search_client
 
 logger = logging.getLogger(__name__)
 
-es_config = get_config("es_config.ini")
-hparams_config = get_config("hparams_config.ini")
+es_config = get_config("es_config")
+hparams_config = get_config("hparams_config")
 
 es = get_elastic_search_client(
     cloud_id=es_config["ELASTIC"]["cloud_id"],
