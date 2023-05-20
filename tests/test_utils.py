@@ -10,21 +10,74 @@ from src.utils import (
     get_context,
     get_elastic_search_client,
     update_context,
+    verify_config
 )
 
 
+class TestVerifyConfig(unittest.TestCase):
+    def setUp(self):
+        # Set up test configurations
+        self.config_es = configparser.ConfigParser()
+        self.config_hparams = configparser.ConfigParser()
+
+        # Add necessary options for each configuration
+        self.config_es.add_section("ELASTIC")
+        self.config_es.set("ELASTIC", "cloud_id", "dummy")
+        self.config_es.set("ELASTIC", "user", "dummy")
+        self.config_es.set("ELASTIC", "password", "dummy")
+
+        self.config_hparams.add_section("HYPERPARAMS")
+        self.config_hparams.set("HYPERPARAMS", "model_checkpoint", "dummy")
+        self.config_hparams.set("HYPERPARAMS", "context_size", "dummy")
+        self.config_hparams.set("HYPERPARAMS", "index_name", "dummy")
+        self.config_hparams.set("HYPERPARAMS", "qa_threshold", "dummy")
+
+    def test_verify_config_with_valid_config(self):
+        # Verify that a valid configuration returns True
+        self.assertTrue(verify_config(self.config_es, "es_config"))
+        self.assertTrue(verify_config(self.config_hparams, "hparams_config"))
+
+    def test_verify_config_with_invalid_config(self):
+        # Verify that an invalid configuration returns False
+        invalid_config_es = configparser.ConfigParser()
+        invalid_config_es.add_section("ELASTIC")
+        invalid_config_es.set("ELASTIC", "cloud_id", "dummy")
+
+        invalid_config_hparams = configparser.ConfigParser()
+        invalid_config_hparams.add_section("SECTION")
+        invalid_config_hparams.set("SECTION", "dummy", "dummy")
+
+        self.assertFalse(verify_config(invalid_config_es, "es_config"))
+        self.assertFalse(verify_config(invalid_config_hparams, "hparams_config"))
+
+
 class TestGetConfig(unittest.TestCase):
-    def test_get_config(self):
-        config_name = "es_config"
-        section_name = "ELASTIC"
-        expected_options = ["cloud_id", "user", "password"]
+    def test_get_config_with_incorrect_config_name(
+        self
+    ):
+        config_name = "dummy_name"
+        # Assert that file is not found with incorrect config name
+        with self.assertRaises(FileNotFoundError):
+            get_config(config_name)
 
-        config = get_config(config_name)
+    @patch("src.utils.verify_config")
+    def test_get_config_with_verified_config_file(
+        self, mock_verify_config
+    ):
+        config_name = "hparams_config"
+        mock_verify_config.return_value = True
 
-        # Assert that required options exist within the config file
-        self.assertIsInstance(config, configparser.ConfigParser)
-        for option in expected_options:
-            self.assertTrue(config.has_option(section_name, option))
+        get_config(config_name)
+
+    @patch("src.utils.verify_config")
+    def test_get_config_with_unverified_config_file(
+        self, mock_verify_config
+    ):
+        config_name = "hparams_config"
+        mock_verify_config.return_value = False
+        # Assert that KeyError is raised with unverified config file
+        with self.assertRaises(KeyError):
+            get_config(config_name)
 
 
 class TestGetContext(unittest.TestCase):
@@ -95,8 +148,7 @@ class TestCalculateElementMRR(unittest.TestCase):
 
     @patch("src.utils.get_context")
     def test_calculate_element_mrr_with_answer_beginning(
-        self,
-        mock_get_context
+        self, mock_get_context
     ):
         # Assert MRR is equal to 1 when the correct context is retieved first
         mock_get_context.return_value = ["answer", "answer"]
@@ -107,27 +159,23 @@ class TestCalculateElementMRR(unittest.TestCase):
 
     @patch("src.utils.get_context")
     def test_calculate_element_mrr_with_answer_not_beginning(
-        self,
-        mock_get_context
+        self, mock_get_context
     ):
         # Assert MRR is less than 1 and greater than zero when the correct
         # context is not retieved first but still within the retrieved contexts
         mock_get_context.return_value = ["dummy", "answer"]
 
         updated_example = calculate_element_mrr(
-                self.example, self.index_name, self.size, self.es
+            self.example, self.index_name, self.size, self.es
         )
         self.assertEqual(updated_example["mrr"], 0.5)
 
     @patch("src.utils.get_context")
-    def test_calculate_element_mrr_without_answer(
-        self,
-        mock_get_context
-    ):
+    def test_calculate_element_mrr_without_answer(self, mock_get_context):
         # Assert MRR is 0 when the correct context is not retrieved at all
         mock_get_context.return_value = ["dummy", "dummy"]
         updated_example = calculate_element_mrr(
-                self.example, self.index_name, self.size, self.es
+            self.example, self.index_name, self.size, self.es
         )
         self.assertEqual(updated_example["mrr"], 0.0)
 
@@ -150,13 +198,11 @@ class TestUpdateContext(unittest.TestCase):
 
         # Set up the mock return value of get_context
         updated_example = update_context(
-                self.example, self.index_name, self.size, self.es
+            self.example, self.index_name, self.size, self.es
         )
 
         # Assert the context has been updated correctly
-        self.assertEqual(
-            updated_example["context"], " ".join(expected_context)
-        )
+        self.assertEqual(updated_example["context"], " ".join(expected_context))
 
         # Assert that get_context was called with the correct arguments
         mock_get_context.assert_called_once_with(
