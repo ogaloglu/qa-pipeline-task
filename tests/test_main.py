@@ -51,10 +51,11 @@ class MyScriptTestCase(unittest.TestCase):
     ):
         mock_get_context.return_value = []
         response = self.client.post("/extract", json={"text": "question"})
-        # Assert pipeline is not called
+        # Assert pipeline is not called when Elasticsearch client returns null
         mock_question_answerer.assert_not_called()
         self.assertEqual(response.status_code, 200)
-        # Assert returning the default answer for scores under the threshold
+        # Assert returning the default answer when Elasticsearch client
+        # returns null
         self.assertEqual(response.json()["text"], "Answer is not found.")
 
 
