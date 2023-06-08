@@ -172,20 +172,23 @@ pytest
     * Exact Match: 82.29
 * End-To-End Pipeline:
     * context_size = 1
-        * F1: 62.68
-        * Exact Match: 68.51
+        * F1: 68.51
+        * Exact Match: 62.65
     * context_size = 2
-        * F1: 66.02
-        * Exact Match: 72.29
+        * F1: 72.29
+        * Exact Match: 66.02
     * context_size = 3
-        * F1: 60.89
-        * Exact Match: 66.85
+        * F1: 66.85
+        * Exact Match: 60.89
     * context_size = 4
-        * F1: 57.99
-        * Exact Match: 64.22
+        * F1: 64.22
+        * Exact Match: 57.99
     * context_size = 5
-        * F1: 56.00
-        * Exact Match: 61.91
+        * F1: 61.91
+        * Exact Match: 56.00
+### Correction
+In the previous version of submission, F1 and EM scores corresponded to EM and F1 respectively, which is corrected in the final version.
+![context_1](https://github.com/ogaloglu/qa-pipeline-task/assets/33498883/615ff8af-8475-4415-8f4d-6560b0c20d19)
 ### Discussion
 The performance of the reader alone represents the upper bound performance for the entire end-to-end pipeline. When we focus solely on the retriever component, we observe a significant decrease in the ratio of uncaptured true answers when the context_size is increased from 1 to 2. However, further increasing the context_size results in only marginal improvements. 
 
